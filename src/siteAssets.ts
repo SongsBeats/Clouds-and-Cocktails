@@ -16,6 +16,7 @@ import eventDetailHero from "../assets/figma/event-detail-hero.png";
 import newsUpdateOne from "../assets/updates/news-update-01.webp";
 import newsUpdateTwo from "../assets/updates/news-update-02.webp";
 import newsUpdateThree from "../assets/updates/news-update-03.webp";
+import brandLogo from "../assets/brand/cnc-logo-header.png";
 
 export const siteAssets = {
   heroDj,
@@ -36,4 +37,5 @@ export const siteAssets = {
   newsUpdateOne,
   newsUpdateTwo,
   newsUpdateThree,
+  brandLogo,
 };

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { siteAssets } from "../siteAssets";
 
 type SiteHeaderProps = {
   path: string;
@@ -26,7 +27,9 @@ export default function SiteHeader({ path, onNavigate, onLogin, isLoggedIn, onLo
   if (path.startsWith("/events/")) {
     return (
       <header className="site-header site-header-detail">
-        <button className="brand" onClick={() => onNavigate("/")} aria-label="Clouds and Cocktails home">CNC.DBX</button>
+        <button className="brand" onClick={() => onNavigate("/")} aria-label="Clouds and Cocktails home">
+          <img src={siteAssets.brandLogo} alt="" />
+        </button>
         <button className="back-events-button" onClick={() => onNavigate("/events")}>Back to Events</button>
       </header>
     );
@@ -35,7 +38,7 @@ export default function SiteHeader({ path, onNavigate, onLogin, isLoggedIn, onLo
   return (
     <header className="site-header">
       <button className="brand" onClick={() => onNavigate("/")} aria-label="Clouds and Cocktails home">
-        CNC.DBX
+        <img src={siteAssets.brandLogo} alt="" />
       </button>
 
       <button
