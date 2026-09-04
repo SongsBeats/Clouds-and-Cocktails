@@ -13,6 +13,9 @@ import eventStrip from "../assets/figma/events-03.png";
 import arrowLeft from "../assets/figma/arrow-left.svg";
 import arrowRight from "../assets/figma/arrow-right.svg";
 import eventDetailHero from "../assets/figma/event-detail-hero.png";
+import newsUpdateOne from "../assets/updates/news-update-01.webp";
+import newsUpdateTwo from "../assets/updates/news-update-02.webp";
+import newsUpdateThree from "../assets/updates/news-update-03.webp";
 
 export const siteAssets = {
   heroDj,
@@ -30,4 +33,7 @@ export const siteAssets = {
   arrowLeft,
   arrowRight,
   eventDetailHero,
+  newsUpdateOne,
+  newsUpdateTwo,
+  newsUpdateThree,
 };

@@ -11,6 +11,24 @@ type HomePageProps = {
 const updates = [
   {
     label: "Featured",
+    title: "Clouds After Dark",
+    detail: "DJ sets from sunset to late",
+    image: siteAssets.newsUpdateOne,
+  },
+  {
+    label: "Rooftop Sessions",
+    title: "Live From the C&C Decks",
+    detail: "Music, cocktails and skyline views",
+    image: siteAssets.newsUpdateTwo,
+  },
+  {
+    label: "Night Sessions",
+    title: "Clouds After Dark at C&C",
+    detail: "Join us for a late-night rooftop set",
+    image: siteAssets.newsUpdateThree,
+  },
+  {
+    label: "Featured",
     title: "Sukoon by Tabu - Friday, Aug 14th",
     detail: "Join us for live music by Tabu",
     image: siteAssets.tabuPoster,
