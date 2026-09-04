@@ -1,113 +1,82 @@
-import React, { useState, useEffect } from "react";
-import Header from "./components/Header";
-import Hero from "./components/Hero";
-import NewsSection from "./components/NewsSection";
-import MyBookings from "./components/MyBookings";
-import EventsGrid from "./components/EventsGrid";
-import VenueFeatures from "./components/VenueFeatures";
-import GallerySection from "./components/GallerySection";
-import MarqueeFooter from "./components/MarqueeFooter";
-import TicketModal from "./components/TicketModal";
-import EventDetailsDrawer from "./components/EventDetailsDrawer";
-import { eventsData } from "./data";
-import { EventItem, Ticket } from "./types";
+import { useCallback, useEffect, useState } from "react";
+import BookingDialog from "./components/BookingDialog";
+import LoginDialog from "./components/LoginDialog";
+import SiteHeader from "./components/SiteHeader";
+import CalendarPage from "./pages/CalendarPage";
+import EventDetailPage from "./pages/EventDetailPage";
+import EventsPage from "./pages/EventsPage";
+import HomePage from "./pages/HomePage";
+
+type BookingMode = "table" | "event" | "member";
+type SitePath = "/" | "/events" | "/events/clouds-after-dark" | "/calendar";
+
+const getPath = (): SitePath => {
+  if (window.location.pathname.startsWith("/events/clouds-after-dark")) return "/events/clouds-after-dark";
+  if (window.location.pathname.startsWith("/calendar")) return "/calendar";
+  if (window.location.pathname.startsWith("/events")) return "/events";
+  return "/";
+};
+
+const resolvePath = (pathname: string): SitePath => {
+  if (pathname.startsWith("/events/clouds-after-dark")) return "/events/clouds-after-dark";
+  if (pathname.startsWith("/calendar")) return "/calendar";
+  if (pathname.startsWith("/events")) return "/events";
+  return "/";
+};
 
 export default function App() {
-  const [tickets, setTickets] = useState<Ticket[]>([]);
-  const [selectedEvent, setSelectedEvent] = useState<EventItem | null>(null);
-  const [isBookingOpen, setIsBookingOpen] = useState(false);
-  const [selectedDetailsEvent, setSelectedDetailsEvent] = useState<EventItem | null>(null);
-  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+  const [path, setPath] = useState<SitePath>(getPath);
+  const [bookingDialog, setBookingDialog] = useState<BookingMode | null>(null);
+  const [loginOpen, setLoginOpen] = useState(false);
+  const [memberName, setMemberName] = useState<string | null>(() => localStorage.getItem("cnc_demo_member"));
 
-  // Find Lena Brooks event for spotlight
-  const lenaBrooksEvent = eventsData.find((e) => e.id === "lena-brooks") || eventsData[2];
-
-  // Load bookings from local storage on load
   useEffect(() => {
-    const saved = localStorage.getItem("cnc_bookings_pass");
-    if (saved) {
-      try {
-        setTickets(JSON.parse(saved));
-      } catch (err) {
-        console.error("Error loading tickets", err);
-      }
-    }
+    const onPopState = () => setPath(getPath());
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
   }, []);
 
-  // Sync bookings to local storage on change
-  const handleBookSuccess = (newTicket: Ticket) => {
-    const updated = [...tickets, newTicket];
-    setTickets(updated);
-    localStorage.setItem("cnc_bookings_pass", JSON.stringify(updated));
+  const navigate = useCallback((destination: string) => {
+    const url = new URL(destination, window.location.origin);
+    window.history.pushState({}, "", `${url.pathname}${url.hash}`);
+    setPath(resolvePath(url.pathname));
+
+    window.requestAnimationFrame(() => {
+      if (url.hash) {
+        document.querySelector(url.hash)?.scrollIntoView({ behavior: "smooth", block: "start" });
+      } else {
+        window.scrollTo({ top: 0, behavior: "auto" });
+      }
+    });
+  }, []);
+
+  const login = (name: string) => {
+    localStorage.setItem("cnc_demo_member", name);
+    setMemberName(name);
   };
 
-  const handleCancelTicket = (id: string) => {
-    const filtered = tickets.filter((t) => t.id !== id);
-    setTickets(filtered);
-    localStorage.setItem("cnc_bookings_pass", JSON.stringify(filtered));
-  };
-
-  const triggerBooking = (event: EventItem) => {
-    setSelectedEvent(event);
-    setIsBookingOpen(true);
-  };
-
-  const triggerDetails = (event: EventItem) => {
-    setSelectedDetailsEvent(event);
-    setIsDetailsOpen(true);
+  const logout = () => {
+    localStorage.removeItem("cnc_demo_member");
+    setMemberName(null);
   };
 
   return (
-    <div className="bg-black text-white font-sans min-h-screen relative selection:bg-brand-neon selection:text-black">
-      {/* 1. Sticky Navigation Header */}
-      <Header />
-
-      {/* 2. Seamless Diagonal split Hero section */}
-      <Hero />
-
-      {/* 3. News Spotlight section */}
-      <NewsSection
-        lenaEvent={lenaBrooksEvent}
-        onOpenModal={triggerBooking}
+    <div className="site-shell">
+      <SiteHeader
+        path={path}
+        onNavigate={navigate}
+        onLogin={() => setLoginOpen(true)}
+        isLoggedIn={memberName !== null}
+        onLogout={logout}
       />
 
-      {/* 4. Active booking pass dashboard (appears only when user has booked tickets!) */}
-      <MyBookings
-        tickets={tickets}
-        onCancelTicket={handleCancelTicket}
-      />
+      {path === "/events" && <EventsPage onBook={setBookingDialog} onNavigate={navigate} />}
+      {path === "/events/clouds-after-dark" && <EventDetailPage onBook={setBookingDialog} onNavigate={navigate} />}
+      {path === "/calendar" && <CalendarPage />}
+      {path === "/" && <HomePage onBook={setBookingDialog} />}
 
-      {/* 5. Events Calendar grid */}
-      <EventsGrid
-        events={eventsData}
-        onOpenModal={triggerBooking}
-        onOpenDetails={triggerDetails}
-      />
-
-      {/* 6. Venue features list columns */}
-      <VenueFeatures />
-
-      {/* 7. Interactive optical gallery */}
-      <GallerySection />
-
-      {/* 8. Footer marquee rows (Opposite multi-directional loops) */}
-      <MarqueeFooter />
-
-      {/* Interactive Transaction Modal */}
-      <TicketModal
-        event={selectedEvent}
-        isOpen={isBookingOpen}
-        onClose={() => setIsBookingOpen(false)}
-        onBookSuccess={handleBookSuccess}
-      />
-
-      {/* Details Side-Drawer panel */}
-      <EventDetailsDrawer
-        event={selectedDetailsEvent}
-        isOpen={isDetailsOpen}
-        onClose={() => setIsDetailsOpen(false)}
-        onBookTickets={triggerBooking}
-      />
+      <BookingDialog open={bookingDialog !== null} mode={bookingDialog ?? "table"} onClose={() => setBookingDialog(null)} />
+      <LoginDialog open={loginOpen} onClose={() => setLoginOpen(false)} onLogin={login} />
     </div>
   );
 }

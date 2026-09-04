@@ -1,6 +1,5 @@
 {
   "name": "Clouds & Cocktails",
-  "description": "High-fidelity landing page for Clouds & Cocktails, a premier event venue and club featuring immersive experiences, events, and a vibrant community.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "description": "Responsive Figma-matched website for Clouds & Cocktails Dubai, including the homepage, event listing, event calendar, and reservation interactions.",
+  "requestFramePermissions": []
 }

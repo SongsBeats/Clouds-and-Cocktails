@@ -1,42 +1,39 @@
-<div align="center">
-  <h1 style="color: #ADFF2F; text-shadow: 2px 2px 4px #000000; font-size: 3em;">🌩️ Clouds and Cocktails 🍸</h1>
-  <p style="color: #C026D3; font-size: 1.2em; font-weight: bold;">Experience the Ultimate Nightlife Booking Platform</p>
-</div>
+# Clouds & Cocktails
 
----
+Responsive React/Vite implementation of the supplied CNC Dubai Figma designs. The Figma imagery and display fonts are bundled locally in `assets/`.
 
-## 🌟 Overview
+## Pages
 
-**Clouds and Cocktails** is a sleek, modern, and immersive web application designed for premium nightlife venues and events. 
-Featuring a dark-mode aesthetic with neon accents, dynamic animations, and a seamless booking experience.
+- `/` — full Clouds & Cocktails homepage
+- `/events` — featured event and filtered event listing
+- `/events/clouds-after-dark` — full event detail and ticket tiers
+- `/calendar` — August 2026 event calendar
 
-## ✨ Features
+Navigation, event filters, news controls, mobile menu, and booking/member forms are interactive.
 
-- 🎨 **Striking Visuals**: A neon-infused, high-contrast dark theme.
-- ⚡ **Lightning Fast**: Built with React and Vite for blazing-fast performance.
-- 🎟️ **Seamless Bookings**: Browse upcoming events and reserve your passes instantly.
-- 📱 **Fully Responsive**: Looks amazing on desktop, tablet, and mobile devices.
+Temporary demo member login:
 
----
+- Email: `member@cnc.dxb`
+- Password: `Clouds2026!`
 
-## 🚀 Run Locally
+## Local development
 
-**Prerequisites:** Node.js installed on your machine.
+```bash
+npm install
+npm run dev
+```
 
-1. **Install dependencies:**
-   ```bash
-   npm install
-   ```
+The development server is available at `http://localhost:3000`.
 
-2. **Start the development server:**
-   ```bash
-   npm run dev
-   ```
+On Windows, if npm misreads a workspace path containing `&`, start Vite directly:
 
-3. **Open your browser:** Navigate to `http://localhost:3000` to see the magic!
+```powershell
+node .\node_modules\vite\bin\vite.js --port 3000 --host 0.0.0.0
+```
 
----
+## Validation
 
-<div align="center">
-  <p style="color: #0000FF; font-weight: bold;">Built with ❤️ and Modern Web Tech</p>
-</div>
+```bash
+npm run lint
+npm run build
+```
